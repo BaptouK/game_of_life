@@ -1,6 +1,5 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
-
 #include "../include/game.h"
 
 void Right_click(int x, int y) {

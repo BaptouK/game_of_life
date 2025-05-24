@@ -18,12 +18,42 @@ bool Game::getPixel(int row, int col) {
     return this->grid[row][col];
 };
 
-bool Game::updatePixel(int row, int col, bool value) {
-    // A FAIRE
+bool Game::updatePixel(int row, int col) {
+    int cpt=0;
+
+    if (is_alive(row+1,col)){
+        cpt++;
+    }
+    if (is_alive(row-1,col)) {
+        cpt++;
+    }
+    if (is_alive(row,col-1)) {
+        cpt++;
+    }
+    if (is_alive(row,col+1)) {
+        cpt++;
+    }
+    if (is_alive(row-1,col-1)) {
+        cpt++;
+    }
+    if (is_alive(row+1,col+1)) {
+        cpt++;
+    }
+    if (is_alive(row-1,col+1)) {
+        cpt++;
+    }
+    if (is_alive(row+1,col-1)) {
+        cpt++;
+    }
+    if (is_alive(row,col)) {
+        if (!(cpt==2||cpt==3)) {
+            return false;
+        }
+    }
+    // FAUT FAIRE LA !!!!!!!!!
 };
 
 bool Game::is_alive(int row, int col) {
-    // A FIX CAR GROS PROBLEM
     if (row <0 || col <0 || row >= this->taille  || col >= this->taille) {
         return false;
     }
@@ -41,35 +71,10 @@ void Game::updateGrid() {
         std::cout << "yo la  team ";
         for (int j = 0; j < this->taille; j++) {
             if (i+1==taille || i-1<0 || j+1==taille || j-1<taille ) {
-                if (this->grid[i+1][j+1]) {
-                    cpt++;
-                }
-                if (this->grid[i+1][j]) {
-                    cpt++;
-                }
-                if (this->grid[i][j+1]) {
-                    cpt++;
-                }
-                if (this->grid[i-1][j]) {
-                    cpt++;
-                }
-                if (this->grid[i][j-1]) {
-                    cpt++;
-                }
-                if (this->grid[i-1][j-1]) {
-                    cpt++;
-                }
-                if (this->grid[i+1][j-1]) {
-                    cpt++;
-                }
-                if (this->grid[i-1][j+1]) {
-                    cpt++;
-                }
-                std::cout << cpt << std::endl;
+
 
                 if (this->grid[i][j]) {
                     if (!(cpt==2||cpt==3) ) {
-                        newGrid[i][j] = false;
                     }
                 }else {
                     if (cpt==3) {

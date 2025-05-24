@@ -13,7 +13,8 @@ public:
 
     bool is_alive(int row, int col);
 
-    bool updatePixel(int row, int col, bool value);
+    bool updatePixel(int row, int col);
+
     void updateGrid();
 
     void showGrid();
