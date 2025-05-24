@@ -18,41 +18,63 @@ bool Game::getPixel(int row, int col) {
     return this->grid[row][col];
 };
 
+//Fonctionnel
 bool Game::updatePixel(int row, int col) {
     int cpt=0;
 
     if (is_alive(row+1,col)){
+        //std::cout << "etape 1" << std::endl;
         cpt++;
     }
     if (is_alive(row-1,col)) {
+        //std::cout << "etape 2" << std::endl;
+
         cpt++;
     }
     if (is_alive(row,col-1)) {
+        //std::cout << "etape 3" << std::endl;
+
         cpt++;
     }
     if (is_alive(row,col+1)) {
+       //std::cout << "etape 4" << std::endl;
         cpt++;
     }
     if (is_alive(row-1,col-1)) {
+        //std::cout << "etape 5" << std::endl;
+
         cpt++;
     }
     if (is_alive(row+1,col+1)) {
+        //std::cout << "etape 6" << std::endl;
+
         cpt++;
     }
     if (is_alive(row-1,col+1)) {
+       //std::cout << "etape 7" << std::endl;
+
         cpt++;
     }
     if (is_alive(row+1,col-1)) {
+        //std::cout << "etape 8" << std::endl;
+
         cpt++;
     }
+    // std:: cout << cpt << std::endl;
     if (is_alive(row,col)) {
         if (!(cpt==2||cpt==3)) {
             return false;
         }
+        return true;
+    }else {
+        if (cpt ==3) {
+            return true;
+        }
+        return false;
     }
-    // FAUT FAIRE LA !!!!!!!!!
 };
 
+// FONCTIONNEL
 bool Game::is_alive(int row, int col) {
     if (row <0 || col <0 || row >= this->taille  || col >= this->taille) {
         return false;
@@ -60,35 +82,20 @@ bool Game::is_alive(int row, int col) {
     return this->grid[row][col];
 };
 
-
 void Game::updateGrid() {
     // A FIX CA FAIT TOUT BUGUER
     std::cout << "Updating grid..." << std::endl;
     std::vector<std::vector<bool>> newGrid;
-    int cpt{0};
 
     for (int i = 0; i < this->taille; i++) {
-        std::cout << "yo la  team ";
+        newGrid.push_back(std::vector<bool> (this->taille, false));
         for (int j = 0; j < this->taille; j++) {
-            if (i+1==taille || i-1<0 || j+1==taille || j-1<taille ) {
-
-
-                if (this->grid[i][j]) {
-                    if (!(cpt==2||cpt==3) ) {
-                    }
-                }else {
-                    if (cpt==3) {
-                        newGrid[i][j] = true;
-                    }
-                }
-
-            }
+            bool newValue = updatePixel(i,j);
+            newGrid[i][j] = newValue;
         }
     }
-    std::cout << "prout" << std::endl;
     this->grid=newGrid;
-    this->showGrid();
-    std::cout << "prout1" << std::endl;
+    std::cout << "Close function" << std::endl;
 
 };
 

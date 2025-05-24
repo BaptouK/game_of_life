@@ -12,14 +12,16 @@ int main() {
 
 
     Game game1(10);
-    game1.setPixel(4,4,true);
     game1.setPixel(4,5,true);
+    game1.setPixel(4,4,true);
     game1.setPixel(4,6,true);
+
     game1.showGrid();
     game1.updateGrid();
     game1.showGrid();
 
-
+    //std::cout << game1.updatePixel(4,4) << std::endl;
+    //std::cout << game1.updatePixel(3,4) << std::endl;
 
     // Crée une fenêtre de 800x600 pixels
     sf::RenderWindow window(sf::VideoMode(1200, 800), "Game of Life");
