@@ -15,6 +15,8 @@ add_executable(game_of_life
         src/main.cpp
         src/game.cpp
         include/game.h
+        src/GameController.cpp
+        include/GameController.h
 )
 
 # Include headers
