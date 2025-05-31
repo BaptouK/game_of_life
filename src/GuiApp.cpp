@@ -216,5 +216,5 @@ void GuiApp::Left_click(int x, int y) {
     std::cout << "Cellule clicked at index x: " << index_x << " y: " << index_y << std::endl;
     cellules[index_x][index_y].setFillColor(sf::Color::Black);
     game->setPixel(index_x,index_y, true);
-    //TODO: Repair bug crash
+
 }
