@@ -116,3 +116,28 @@ void Game::showGrid() {
     }
     std::cout << grid << std::endl;
 };
+
+void Game::CreateSoup() {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0,1);
+    auto a = dis(gen);
+    for (int i = 0; i < this->taille; i++) {
+        for (int j = 0; j < this->taille; j++) {
+            if (a == 1) {
+                this->setPixel(i, j, true);
+            } else {
+                this->setPixel(i, j, false);
+            }
+            a = dis(gen);
+        }
+    }
+};
+
+void Game::clearGrid() {
+    for (int i = 0; i < this->taille; i++) {
+        for (int j = 0; j < this->taille; j++) {
+            this->setPixel(i, j, false);
+        }
+    }
+};
