@@ -4,9 +4,37 @@
 #include <float.h>
 
 
-GuiApp::GuiApp(Game game) : window(sf::VideoMode(1100, 800), "Game of Life"), game(game) {
+GuiApp::GuiApp(Game *game) : window(sf::VideoMode(1100, 800), "Game of Life"), game(game) {
     window.setVerticalSyncEnabled(true); // Permet de gérer le framerate avec le gpu pour ce synchro avec l'écran
+    //window.setFramerateLimit(165);
+
+    int i =1;
     while (window.isOpen()) {
+
+        int x = game_coord.first;
+        int y = game_coord.second;
+        //Create grid
+        for (int i = 0; i < game->getTaille(); i++) {
+            this->cellules.push_back(std::vector<sf::RectangleShape>());
+            for (int j = 0; j < game->getTaille(); j++) {
+                auto cellule_color = sf::Color::Black;
+                if (!game->is_alive(i, j)) {
+                    cellule_color = sf::Color::White;
+                }
+
+                sf::RectangleShape cellule(sf::Vector2f( taille_cellule,taille_cellule));
+                cellule.setFillColor(cellule_color);
+                cellule.setPosition(sf::Vector2f(x, y));
+                cellule.setOutlineColor(sf::Color(156, 156, 156));
+                cellule.setOutlineThickness(1);
+                this->cellules[i].push_back(cellule);
+
+                x+=taille_cellule;
+            }
+            x = game_coord.first;
+            y+=taille_cellule;
+        }
+
         sf::Event event;
 
         sf::RectangleShape menu(sf::Vector2f(300, 800));
@@ -32,7 +60,10 @@ GuiApp::GuiApp(Game game) : window(sf::VideoMode(1100, 800), "Game of Life"), ga
         label_start.setCharacterSize(50);
         window.draw(label_start);
 
-        display_grid(game);
+
+        display_grid();
+
+        std::cout << i << std::endl;
 
         window.display();
 
@@ -46,6 +77,7 @@ GuiApp::GuiApp(Game game) : window(sf::VideoMode(1100, 800), "Game of Life"), ga
                 if (event.mouseButton.button == sf::Mouse::Right){
                     std::cout << "Right click" << std::endl;
                     std::cout << "mouse x " << event.mouseButton.x << " y " << event.mouseButton.y << std::endl;
+
                     Right_click(event.mouseButton.x, event.mouseButton.y);
                 }
             }
@@ -56,48 +88,47 @@ GuiApp::GuiApp(Game game) : window(sf::VideoMode(1100, 800), "Game of Life"), ga
 
         }
     }
+
 };
 
 GuiApp::~GuiApp() {
 
 };
 
-void GuiApp::display_grid(Game game) {
+void GuiApp::display_grid() {
     // Diviser taille/nombre de cellules pour un truc responsive
-    float taille_cellule{static_cast<float>(game_size.first/game.getTaille())};
-    int x = game_coord.first;
-    int y = game_coord.second;
+    std::cout << "GUI grid display" << std::endl;
 
-
-    for (int i = 0; i < game.getTaille(); i++) {
-        this->cellules.push_back(std::vector<sf::RectangleShape>());
-        for (int j = 0; j < game.getTaille(); j++) {
-            auto cellule_color = sf::Color::Black;
-            if (!game.is_alive(i, j)) {
-                cellule_color = sf::Color::White;
-            }
-
-            sf::RectangleShape cellule(sf::Vector2f( taille_cellule,taille_cellule));
-            cellule.setFillColor(cellule_color);
-            cellule.setPosition(sf::Vector2f(x, y));
-            cellule.setOutlineColor(sf::Color(156, 156, 156));
-            cellule.setOutlineThickness(1);
-            this->cellules[i].push_back(cellule);
-            window.draw(cellule);
-
-        x+=taille_cellule;
+    for (int i = 0; i < cellules.size(); i++) {
+        for (int j = 0; j < cellules[i].size(); j++) {
+            window.draw(cellules[i][j]);
         }
-        x = game_coord.first;
-        y+=taille_cellule;
     }
-
-
-
 };
+
+void GuiApp::update_grid() {
+    std::cout << "GUI grid update" << std::endl;
+    for (int i = 0; i < cellules.size(); i++) {
+        for (int j = 0; j < cellules[i].size(); j++) {
+            if (game->is_alive(i, j)) {
+                cellules[i][j].setFillColor(sf::Color::Red);
+            }
+            else {
+                cellules[i][j].setFillColor(sf::Color::Green);
+            }
+        }
+    }
+};
+
 
 void GuiApp::Right_click(int x, int y) {
     if (!(x<40 || x>130) && !(y<40 ||y>100)) {
         std::cout << "yop la team le bouton a ete clicke "<< std::endl;
         this->btn_color = sf::Color::Red;
+
+        game->updateGrid();
+        game->showGrid();
+        this->update_grid();
+
     }
 }

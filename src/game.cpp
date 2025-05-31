@@ -23,7 +23,7 @@ int Game::getTaille() {
 };
 
 
-//Fonctionnel
+
 bool Game::updatePixel(int row, int col) {
     int cpt=0;
 
@@ -79,7 +79,7 @@ bool Game::updatePixel(int row, int col) {
     }
 };
 
-// FONCTIONNEL
+
 bool Game::is_alive(int row, int col) {
     if (row <0 || col <0 || row >= this->taille  || col >= this->taille) {
         return false;
@@ -88,7 +88,7 @@ bool Game::is_alive(int row, int col) {
 };
 
 void Game::updateGrid() {
-    // A FIX CA FAIT TOUT BUGUER
+
     std::cout << "Updating grid..." << std::endl;
     std::vector<std::vector<bool>> newGrid;
 
