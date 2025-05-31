@@ -18,6 +18,11 @@ bool Game::getPixel(int row, int col) {
     return this->grid[row][col];
 };
 
+int Game::getTaille() {
+    return this->taille;
+};
+
+
 //Fonctionnel
 bool Game::updatePixel(int row, int col) {
     int cpt=0;

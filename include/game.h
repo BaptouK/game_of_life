@@ -11,6 +11,9 @@ public:
     void setPixel(int row, int col, bool value);
     bool getPixel(int row, int col);
 
+    int getTaille();
+    int getGrid();
+
     bool is_alive(int row, int col);
 
     bool updatePixel(int row, int col);

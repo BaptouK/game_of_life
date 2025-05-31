@@ -1,6 +1,3 @@
-//
-// Created by Bapti on 5/24/2025.
-//
 
 #ifndef GAMECONTROLLER_H
 #define GAMECONTROLLER_H
