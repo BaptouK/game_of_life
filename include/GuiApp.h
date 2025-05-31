@@ -4,21 +4,25 @@
 #include <SFML/Graphics.hpp>
 
 #include "game.h"
+#include "GameController.h"
 
 class GuiApp {
 public:
-    GuiApp(Game *game);
+    GuiApp(Game *game,GameController *gameController);
     ~GuiApp();
     void run();
 
-    void Right_click(int x, int y);
+    void Left_click(int x, int y);
 
     void display_grid();
     void update_grid();
 
+    void setGameController(GameController *gameController);
+
 private:
     std::vector<std::vector<sf::RectangleShape>> cellules;
     Game *game;
+    GameController *gameController;
     sf::Color btn_color{sf::Color(250, 150,100)};
     std::pair<int,int> window_size{1100,800};
     std::pair<int,int> leftPanel_size{300,800};

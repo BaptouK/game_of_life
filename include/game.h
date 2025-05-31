@@ -22,6 +22,9 @@ public:
 
     void showGrid();
 
+    void CreateSoup();
+
+    void clearGrid();
 private:
     std::vector<std::vector<bool>> grid;
     int taille;

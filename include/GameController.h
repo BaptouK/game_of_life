@@ -1,21 +1,31 @@
 
 #ifndef GAMECONTROLLER_H
 #define GAMECONTROLLER_H
-
-
+#include "game.h"
+#include <thread>
 
 class GameController {
 public:
-    GameController();
+    GameController(Game *game);
     ~GameController();
     enum class GameState {
         Running,
         Stop
     };
 
+    GameState getState();
+    void setState(GameState state);
+
+    std::chrono::milliseconds getSpeed();
+    void setSpeed(std::chrono::milliseconds speed);
+
+    void update_game_logic();
+
 private:
-    float speed {5.f};
-    GameState state {GameState::Stop};
+    std::chrono::milliseconds speed {500};
+    GameState state {GameState::Running};
+    Game *game;
+    std::mutex mutex;
 };
 
 

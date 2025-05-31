@@ -4,7 +4,7 @@
 #include <float.h>
 
 
-GuiApp::GuiApp(Game *game) : window(sf::VideoMode(1100, 800), "Game of Life"), game(game) {
+GuiApp::GuiApp(Game *game,GameController *gameController) : window(sf::VideoMode(1100, 800), "Game of Life"), game(game), gameController(gameController) {
     window.setVerticalSyncEnabled(true); // Permet de gérer le framerate avec le gpu pour ce synchro avec l'écran
     //window.setFramerateLimit(165);
 
@@ -42,16 +42,15 @@ GuiApp::GuiApp(Game *game) : window(sf::VideoMode(1100, 800), "Game of Life"), g
         menu.setPosition(sf::Vector2f(0,0));
         window.draw(menu);
 
-        sf::RectangleShape bouton_start(sf::Vector2f(90, 60));
-        bouton_start.setFillColor(this->btn_color);
-        bouton_start.setPosition(sf::Vector2f(40,40));
-        window.draw(bouton_start);
-
-
         sf::Font font;
         if (!font.loadFromFile("../assets/OpenSans_Condensed-Light.ttf")) {
             std::cout << "Error loading font" << std::endl;
         }
+
+        sf::RectangleShape btn_start(sf::Vector2f(90, 60));
+        btn_start.setFillColor(this->btn_color);
+        btn_start.setPosition(sf::Vector2f(40,40));
+        window.draw(btn_start);
         sf::Text label_start;
         label_start.setPosition(sf::Vector2f(45, 40));
         label_start.setString("Start");
@@ -60,10 +59,45 @@ GuiApp::GuiApp(Game *game) : window(sf::VideoMode(1100, 800), "Game of Life"), g
         label_start.setCharacterSize(50);
         window.draw(label_start);
 
+        sf::RectangleShape btn_stop(sf::Vector2f(110, 60));
+        btn_stop.setFillColor(this->btn_color);
+        btn_stop.setPosition(sf::Vector2f(160,40));
+        window.draw(btn_stop);
+        sf::Text label_stop;
+        label_stop.setPosition(sf::Vector2f(165, 40));
+        label_stop.setString("Pause");
+        label_stop.setFont(font);
+        label_stop.setFillColor(sf::Color::Black);
+        label_stop.setCharacterSize(50);
+        window.draw(label_stop);
+
+        sf::RectangleShape btn_soup(sf::Vector2f(90, 60));
+        btn_soup.setFillColor(this->btn_color);
+        btn_soup.setPosition(sf::Vector2f(40,120));
+        window.draw(btn_soup);
+        sf::Text label_soup;
+        label_soup.setPosition(sf::Vector2f(45, 115));
+        label_soup.setString("Soup");
+        label_soup.setFont(font);
+        label_soup.setFillColor(sf::Color::Black);
+        label_soup.setCharacterSize(50);
+        window.draw(label_soup);
+
+        sf::RectangleShape btn_clear(sf::Vector2f(110, 60));
+        btn_clear.setFillColor(this->btn_color);
+        btn_clear.setPosition(sf::Vector2f(160,120));
+        window.draw(btn_clear);
+        sf::Text label_clear;
+        label_clear.setPosition(sf::Vector2f(165, 115));
+        label_clear.setString("Clear");
+        label_clear.setFont(font);
+        label_clear.setFillColor(sf::Color::Black);
+        label_clear.setCharacterSize(50);
+        window.draw(label_clear);
 
         display_grid();
 
-        std::cout << i << std::endl;
+        //std::cout << i << std::endl;
 
         window.display();
 
@@ -74,11 +108,11 @@ GuiApp::GuiApp(Game *game) : window(sf::VideoMode(1100, 800), "Game of Life"), g
             }
 
             if (event.type == sf::Event::MouseButtonPressed){
-                if (event.mouseButton.button == sf::Mouse::Right){
+                if (event.mouseButton.button == sf::Mouse::Left){
                     std::cout << "Right click" << std::endl;
                     std::cout << "mouse x " << event.mouseButton.x << " y " << event.mouseButton.y << std::endl;
 
-                    Right_click(event.mouseButton.x, event.mouseButton.y);
+                    Left_click(event.mouseButton.x, event.mouseButton.y);
                 }
             }
 
@@ -97,7 +131,7 @@ GuiApp::~GuiApp() {
 
 void GuiApp::display_grid() {
     // Diviser taille/nombre de cellules pour un truc responsive
-    std::cout << "GUI grid display" << std::endl;
+    //std::cout << "GUI grid display" << std::endl;
 
     for (int i = 0; i < cellules.size(); i++) {
         for (int j = 0; j < cellules[i].size(); j++) {
@@ -105,6 +139,11 @@ void GuiApp::display_grid() {
         }
     }
 };
+
+void GuiApp::setGameController(GameController *gc) {
+    this->gameController = gc;
+};
+
 
 void GuiApp::update_grid() {
     std::cout << "GUI grid update" << std::endl;
@@ -121,14 +160,24 @@ void GuiApp::update_grid() {
 };
 
 
-void GuiApp::Right_click(int x, int y) {
-    if (!(x<40 || x>130) && !(y<40 ||y>100)) {
-        std::cout << "yop la team le bouton a ete clicke "<< std::endl;
-        this->btn_color = sf::Color::Red;
-
-        game->updateGrid();
-        game->showGrid();
-        this->update_grid();
-
+void GuiApp::Left_click(int x, int y) {
+    if (!(x<40 || x>130) && !(y<40 ||y>100)) { // Start Button
+        std::cout << "Start button clicked " << std::endl;
+        gameController->setState(GameController::GameState::Running);
     }
+
+    if (!(x<130 || x>270) && !(y<40 ||y>100)) { // Stop Button
+        std::cout << "Stop button clicked " << std::endl;
+        gameController->setState(GameController::GameState::Stop);
+    }
+
+    if (!(x<40 || x>130) && !(y<120 ||y>180)) { // Soup Button
+        std::cout << "Soup button clicked " << std::endl;
+        game->CreateSoup();
+    }
+
+    if (!(x<130 || x>270) && !(y<120 ||y>180)) { // Clear Button
+        std::cout << "Clear button clicked " << std::endl;
+        game->clearGrid();
+     }
 }

@@ -1,6 +1,7 @@
 #include "../include/game.h"
 #include <iostream>
 #include <vector>
+#include <random>
 
 Game::Game(int taille) : taille(taille) {
     for (int i = 0; i < taille; i++) {
@@ -89,7 +90,7 @@ bool Game::is_alive(int row, int col) {
 
 void Game::updateGrid() {
 
-    std::cout << "Updating grid..." << std::endl;
+    //std::cout << "Updating grid..." << std::endl;
     std::vector<std::vector<bool>> newGrid;
 
     for (int i = 0; i < this->taille; i++) {
@@ -100,7 +101,7 @@ void Game::updateGrid() {
         }
     }
     this->grid=newGrid;
-    std::cout << "Close function" << std::endl;
+    //std::cout << "Close function" << std::endl;
 
 };
 
