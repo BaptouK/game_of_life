@@ -5,35 +5,57 @@
 
 
 GuiApp::GuiApp(Game *game,GameController *gameController) : window(sf::VideoMode(1100, 800), "Game of Life"), game(game), gameController(gameController) {
-    window.setVerticalSyncEnabled(true); // Permet de gérer le framerate avec le gpu pour ce synchro avec l'écran
-    //window.setFramerateLimit(165);
+    //window.setVerticalSyncEnabled(true); // Permet de gérer le framerate avec le gpu pour ce synchro avec l'écran
+    window.setFramerateLimit(60);
 
-    int i =1;
-    while (window.isOpen()) {
-
-        int x = game_coord.first;
-        int y = game_coord.second;
-        //Create grid
-        for (int i = 0; i < game->getTaille(); i++) {
-            this->cellules.push_back(std::vector<sf::RectangleShape>());
-            for (int j = 0; j < game->getTaille(); j++) {
-                auto cellule_color = sf::Color::Black;
-                if (!game->is_alive(i, j)) {
-                    cellule_color = sf::Color::White;
-                }
-
-                sf::RectangleShape cellule(sf::Vector2f( taille_cellule,taille_cellule));
-                cellule.setFillColor(cellule_color);
-                cellule.setPosition(sf::Vector2f(x, y));
-                cellule.setOutlineColor(sf::Color(156, 156, 156));
-                cellule.setOutlineThickness(1);
-                this->cellules[i].push_back(cellule);
-
-                x+=taille_cellule;
+    int x = game_coord.first;
+    int y = game_coord.second;
+    //Create grid
+    for (int i = 0; i < game->getTaille(); i++) {
+        this->cellules.push_back(std::vector<sf::RectangleShape>());
+        for (int j = 0; j < game->getTaille(); j++) {
+            auto cellule_color = sf::Color::Black;
+            if (!game->is_alive(i, j)) {
+                cellule_color = sf::Color::White;
             }
-            x = game_coord.first;
-            y+=taille_cellule;
+
+            sf::RectangleShape cellule(sf::Vector2f( taille_cellule,taille_cellule));
+            cellule.setFillColor(cellule_color);
+            cellule.setPosition(sf::Vector2f(x, y));
+            cellule.setOutlineColor(sf::Color(156, 156, 156));
+            cellule.setOutlineThickness(1);
+            this->cellules[i].push_back(cellule);
+
+            x+=taille_cellule;
         }
+        x = game_coord.first;
+        y+=taille_cellule;
+    }
+    for (int i = 0; i < game->getTaille(); i++) {
+        this->cellules.push_back(std::vector<sf::RectangleShape>());
+
+        for (int j = 0; j < game->getTaille(); j++) {
+
+            auto cellule_color = sf::Color::White;
+
+            if (game->is_alive(i, j)) {
+                cellule_color = sf::Color::Black;
+            }
+
+            sf::RectangleShape cellule(sf::Vector2f( taille_cellule,taille_cellule));
+            cellule.setFillColor(cellule_color);
+            cellule.setPosition(sf::Vector2f(x, y));
+            cellule.setOutlineColor(sf::Color(156, 156, 156));
+            cellule.setOutlineThickness(1);
+            this->cellules[i].push_back(cellule);
+
+            x+=taille_cellule;
+        }
+        x = game_coord.first;
+        y+=taille_cellule;
+    }
+
+    while (window.isOpen()) {
 
         sf::Event event;
 
@@ -95,9 +117,8 @@ GuiApp::GuiApp(Game *game,GameController *gameController) : window(sf::VideoMode
         label_clear.setCharacterSize(50);
         window.draw(label_clear);
 
+        update_grid();
         display_grid();
-
-        //std::cout << i << std::endl;
 
         window.display();
 
@@ -121,6 +142,7 @@ GuiApp::GuiApp(Game *game,GameController *gameController) : window(sf::VideoMode
             }
 
         }
+        window.clear();
     }
 
 };
@@ -146,14 +168,14 @@ void GuiApp::setGameController(GameController *gc) {
 
 
 void GuiApp::update_grid() {
-    std::cout << "GUI grid update" << std::endl;
+    //std::cout << "GUI grid update" << std::endl;
     for (int i = 0; i < cellules.size(); i++) {
         for (int j = 0; j < cellules[i].size(); j++) {
             if (game->is_alive(i, j)) {
-                cellules[i][j].setFillColor(sf::Color::Red);
+                cellules[i][j].setFillColor(sf::Color::Black);
             }
             else {
-                cellules[i][j].setFillColor(sf::Color::Green);
+                cellules[i][j].setFillColor(sf::Color::White);
             }
         }
     }
@@ -161,23 +183,38 @@ void GuiApp::update_grid() {
 
 
 void GuiApp::Left_click(int x, int y) {
+
     if (!(x<40 || x>130) && !(y<40 ||y>100)) { // Start Button
         std::cout << "Start button clicked " << std::endl;
         gameController->setState(GameController::GameState::Running);
+        return;
     }
 
     if (!(x<130 || x>270) && !(y<40 ||y>100)) { // Stop Button
         std::cout << "Stop button clicked " << std::endl;
         gameController->setState(GameController::GameState::Stop);
+        return;
     }
 
     if (!(x<40 || x>130) && !(y<120 ||y>180)) { // Soup Button
         std::cout << "Soup button clicked " << std::endl;
         game->CreateSoup();
+        return;
     }
 
     if (!(x<130 || x>270) && !(y<120 ||y>180)) { // Clear Button
         std::cout << "Clear button clicked " << std::endl;
         game->clearGrid();
+        return;
      }
+
+    // Detecter si on clique sur une cellule
+
+    int index_x = static_cast<int>(x/((window_size.first-leftPanel_size.first)/ game->getTaille())) ;
+    int index_y = static_cast<int>(y/((window_size.second-leftPanel_size.second)/ game->getTaille()));
+
+    std::cout << "Cellule clicked at index x: " << index_x << " y: " << index_y << std::endl;
+    cellules[index_x][index_y].setFillColor(sf::Color::Black);
+    game->setPixel(index_x,index_y, true);
+    //TODO: Repair bug crash
 }
