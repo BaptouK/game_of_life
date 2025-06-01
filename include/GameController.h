@@ -22,8 +22,8 @@ public:
     void update_game_logic();
 
 private:
-    std::chrono::milliseconds speed {200};
-    GameState state {GameState::Running};
+    std::chrono::milliseconds speed {1000};
+    GameState state {GameState::Stop};
     Game *game;
     std::mutex mutex;
 };

@@ -14,6 +14,8 @@ public:
     int getTaille();
     int getGrid();
 
+    int getGeneration();
+
     bool is_alive(int row, int col);
 
     bool updatePixel(int row, int col);
@@ -26,6 +28,7 @@ public:
 
     void clearGrid();
 private:
+    unsigned int generation{0};
     std::vector<std::vector<bool>> grid;
     int taille;
 };

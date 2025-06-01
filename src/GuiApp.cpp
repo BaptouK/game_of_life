@@ -55,6 +55,20 @@ GuiApp::GuiApp(Game *game,GameController *gameController) : window(sf::VideoMode
         y+=taille_cellule;
     }
 
+    sf::Font font;
+    if (!font.loadFromFile("../assets/OpenSans_Condensed-Light.ttf")) {
+        std::cout << "Error loading font" << std::endl;
+    }
+
+    sf::Texture single_arrow;
+    single_arrow.loadFromFile("../assets/arrow1.png");
+
+    sf::Texture double_arrow;
+    double_arrow.loadFromFile("../assets/arrow2.png");
+
+    sf::Texture pause;
+    pause.loadFromFile("../assets/pause.png");
+
     while (window.isOpen()) {
 
         sf::Event event;
@@ -64,53 +78,79 @@ GuiApp::GuiApp(Game *game,GameController *gameController) : window(sf::VideoMode
         menu.setPosition(sf::Vector2f(0,0));
         window.draw(menu);
 
-        sf::Font font;
-        if (!font.loadFromFile("../assets/OpenSans_Condensed-Light.ttf")) {
-            std::cout << "Error loading font" << std::endl;
-        }
 
-        sf::RectangleShape btn_start(sf::Vector2f(90, 60));
-        btn_start.setFillColor(this->btn_color);
-        btn_start.setPosition(sf::Vector2f(40,40));
-        window.draw(btn_start);
-        sf::Text label_start;
-        label_start.setPosition(sf::Vector2f(45, 40));
-        label_start.setString("Start");
-        label_start.setFont(font);
-        label_start.setFillColor(sf::Color::Black);
-        label_start.setCharacterSize(50);
-        window.draw(label_start);
 
-        sf::RectangleShape btn_stop(sf::Vector2f(110, 60));
-        btn_stop.setFillColor(this->btn_color);
-        btn_stop.setPosition(sf::Vector2f(160,40));
-        window.draw(btn_stop);
-        sf::Text label_stop;
-        label_stop.setPosition(sf::Vector2f(165, 40));
-        label_stop.setString("Pause");
-        label_stop.setFont(font);
-        label_stop.setFillColor(sf::Color::Black);
-        label_stop.setCharacterSize(50);
-        window.draw(label_stop);
+        sf::RectangleShape rec_gen_speed(sf::Vector2f(250, 60));
+        rec_gen_speed.setFillColor(this->btn_color);
+        rec_gen_speed.setPosition(sf::Vector2f(30,40));
+        //window.draw(rec_gen_speed);
+        sf::Text label_speed;
+        label_speed.setPosition(sf::Vector2f(40, 35));
+        label_speed.setString("Speed : "+ std::to_string(gameController->getSpeed().count()) + "ms");
+        label_speed.setFont(font);
+        label_speed.setFillColor(sf::Color::Black);
+        label_speed.setCharacterSize(50);
+        window.draw(label_speed);
 
-        sf::RectangleShape btn_soup(sf::Vector2f(90, 60));
-        btn_soup.setFillColor(this->btn_color);
-        btn_soup.setPosition(sf::Vector2f(40,120));
-        window.draw(btn_soup);
-        sf::Text label_soup;
-        label_soup.setPosition(sf::Vector2f(45, 115));
-        label_soup.setString("Soup");
-        label_soup.setFont(font);
-        label_soup.setFillColor(sf::Color::Black);
-        label_soup.setCharacterSize(50);
-        window.draw(label_soup);
+
+        sf::Sprite double_speed_down;
+        double_speed_down.setTexture(double_arrow);
+        double_speed_down.setPosition(sf::Vector2f(10,125));
+        double_speed_down.setScale(sf::Vector2f(0.15,0.15));
+        window.draw(double_speed_down);
+
+        sf::Sprite single_speed_down;
+        single_speed_down.setTexture(single_arrow);
+        single_speed_down.setPosition(sf::Vector2f(55,125));
+        single_speed_down.setScale(sf::Vector2f(0.15,0.15));
+        window.draw(single_speed_down);
+
+        sf::Sprite btn_pause;
+        btn_pause.setTexture(pause);
+        btn_pause.setPosition(sf::Vector2f(135,145));
+        btn_pause.setScale(sf::Vector2f(0.18,0.18));
+        window.draw(btn_pause);
+
+        sf::Sprite single_speed_up;
+        single_speed_up.setTexture(single_arrow);
+        single_speed_up.setPosition(sf::Vector2f(250,200));
+        single_speed_up.setScale(sf::Vector2f(0.15,0.15));
+        single_speed_up.setRotation(180);
+        window.draw(single_speed_up);
+
+        sf::Sprite double_speed_up;
+        double_speed_up.setTexture(double_arrow);
+        double_speed_up.setPosition(sf::Vector2f(300,200));
+        double_speed_up.setScale(sf::Vector2f(0.15,0.15));
+        double_speed_up.setRotation(180);
+        window.draw(double_speed_up);
+
+        sf::Text counter_generation;
+        counter_generation.setPosition(sf::Vector2f(30, 200));
+        counter_generation.setString("Generation : "+ std::to_string(game->getGeneration()));
+        counter_generation.setFont(font);
+        counter_generation.setFillColor(sf::Color::Black);
+        counter_generation.setCharacterSize(50);
+        window.draw(counter_generation);
+
+        sf::RectangleShape btn_randomizer(sf::Vector2f(230, 60));
+        btn_randomizer.setFillColor(this->btn_color);
+        btn_randomizer.setPosition(sf::Vector2f(30,270));
+        window.draw(btn_randomizer);
+        sf::Text label_randomizer;
+        label_randomizer.setPosition(sf::Vector2f(40, 266));
+        label_randomizer.setString("Randomizer");
+        label_randomizer.setFont(font);
+        label_randomizer.setFillColor(sf::Color::Black);
+        label_randomizer.setCharacterSize(50);
+        window.draw(label_randomizer);
 
         sf::RectangleShape btn_clear(sf::Vector2f(110, 60));
         btn_clear.setFillColor(this->btn_color);
-        btn_clear.setPosition(sf::Vector2f(160,120));
+        btn_clear.setPosition(sf::Vector2f(30,340));
         window.draw(btn_clear);
         sf::Text label_clear;
-        label_clear.setPosition(sf::Vector2f(165, 115));
+        label_clear.setPosition(sf::Vector2f(40, 340));
         label_clear.setString("Clear");
         label_clear.setFont(font);
         label_clear.setFillColor(sf::Color::Black);
@@ -136,6 +176,7 @@ GuiApp::GuiApp(Game *game,GameController *gameController) : window(sf::VideoMode
                     Left_click(event.mouseButton.x, event.mouseButton.y);
                 }
             }
+            
 
             if (event.type == sf::Event::MouseMoved){
                 //std::cout << "coords mouse x " << event.mouseMove.x << " y "  << event.mouseMove.y << std::endl;
@@ -184,37 +225,64 @@ void GuiApp::update_grid() {
 
 void GuiApp::Left_click(int x, int y) {
 
-    if (!(x<40 || x>130) && !(y<40 ||y>100)) { // Start Button
-        std::cout << "Start button clicked " << std::endl;
-        gameController->setState(GameController::GameState::Running);
+    if (!(x<130 || x>170) && !(y<140 ||y>180)) { // Start Button
+        if (gameController->getState() == GameController::GameState::Running) {
+            gameController->setState(GameController::GameState::Stop);
+        }else {
+            gameController->setState(GameController::GameState::Running);
+        }
         return;
     }
 
-    if (!(x<130 || x>270) && !(y<40 ||y>100)) { // Stop Button
-        std::cout << "Stop button clicked " << std::endl;
-        gameController->setState(GameController::GameState::Stop);
-        return;
-    }
-
-    if (!(x<40 || x>130) && !(y<120 ||y>180)) { // Soup Button
-        std::cout << "Soup button clicked " << std::endl;
+    if (!(x<30 || x>260) && !(y<270 ||y>330)) { // Randomizer Button
         game->CreateSoup();
         return;
     }
 
-    if (!(x<130 || x>270) && !(y<120 ||y>180)) { // Clear Button
+    if (!(x<30 || x>140) && !(y<340 ||y>400)) { // Clear Button
         std::cout << "Clear button clicked " << std::endl;
         game->clearGrid();
         return;
      }
 
-    // Detecter si on clique sur une cellule
+    if (!(x<70 || x>110) && !(y<140 ||y>180)) { // Single Speed Down Button
+        std::cout << "Prout " << std::endl;
+        std::chrono::milliseconds speed{50};
+        gameController->setSpeed(gameController->getSpeed()+speed );
+        return;
+    }
 
-    int index_x = static_cast<int>(x/((window_size.first-leftPanel_size.first)/ game->getTaille())) ;
-    int index_y = static_cast<int>(y/((window_size.second-leftPanel_size.second)/ game->getTaille()));
+    if (!(x<10 || x>65) && !(y<140 ||y>180)) { // Double Speed Down Button
+        std::cout << "Prout " << std::endl;
+        std::chrono::milliseconds speed{100};
+        gameController->setSpeed(gameController->getSpeed()+speed );
+        return;
+    }
 
-    std::cout << "Cellule clicked at index x: " << index_x << " y: " << index_y << std::endl;
-    cellules[index_x][index_y].setFillColor(sf::Color::Black);
-    game->setPixel(index_x,index_y, true);
+    if (!(x<190 || x>220) && !(y<140 ||y>180)) { // Single Speed Up Button
+        std::cout << "Prout " << std::endl;
+        std::chrono::milliseconds speed{50};
+        gameController->setSpeed(gameController->getSpeed()-speed );
+        return;
+    }
+
+    if (!(x<240 || x>290) && !(y<140 ||y>180)) { // Double Speed Up Button
+        std::cout << "Prout " << std::endl;
+        std::chrono::milliseconds speed{100};
+        gameController->setSpeed(gameController->getSpeed()-speed );
+        return;
+    }
+
+    x -= game_coord.first;
+    y -= game_coord.second;
+    x/= taille_cellule;
+    y/= taille_cellule;
+
+    std::cout << "coords : " << x << "  -  " << y<< std::endl;
+    if (game->is_alive(y,x)) {
+        game->setPixel(y,x,false);
+    } else {
+        game->setPixel(y,x,true);
+    }
 
 }

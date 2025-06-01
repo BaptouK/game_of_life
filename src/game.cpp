@@ -89,6 +89,7 @@ bool Game::is_alive(int row, int col) {
 };
 
 void Game::updateGrid() {
+    generation++;
 
     //std::cout << "Updating grid..." << std::endl;
     std::vector<std::vector<bool>> newGrid;
@@ -134,6 +135,10 @@ void Game::CreateSoup() {
         }
     }
 };
+
+int Game::getGeneration() {
+    return generation;
+}
 
 void Game::clearGrid() {
     for (int i = 0; i < this->taille; i++) {
