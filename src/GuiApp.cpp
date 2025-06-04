@@ -69,6 +69,9 @@ GuiApp::GuiApp(Game *game,GameController *gameController) : window(sf::VideoMode
     sf::Texture pause;
     pause.loadFromFile("../assets/pause.png");
 
+    sf::Texture start;
+    start.loadFromFile("../assets/start.png");
+
     while (window.isOpen()) {
 
         sf::Event event;
@@ -77,8 +80,6 @@ GuiApp::GuiApp(Game *game,GameController *gameController) : window(sf::VideoMode
         menu.setFillColor(sf::Color(150, 150, 150));
         menu.setPosition(sf::Vector2f(0,0));
         window.draw(menu);
-
-
 
         sf::RectangleShape rec_gen_speed(sf::Vector2f(250, 60));
         rec_gen_speed.setFillColor(this->btn_color);
@@ -105,11 +106,21 @@ GuiApp::GuiApp(Game *game,GameController *gameController) : window(sf::VideoMode
         single_speed_down.setScale(sf::Vector2f(0.15,0.15));
         window.draw(single_speed_down);
 
-        sf::Sprite btn_pause;
-        btn_pause.setTexture(pause);
-        btn_pause.setPosition(sf::Vector2f(135,145));
-        btn_pause.setScale(sf::Vector2f(0.18,0.18));
-        window.draw(btn_pause);
+        if (gameController->getState() == GameController::GameState::Stop) {
+            sf::Sprite btn_start;
+            btn_start.setTexture(start);
+            btn_start.setPosition(sf::Vector2f(140,145));
+            btn_start.setScale(sf::Vector2f(0.35,0.35));
+            window.draw(btn_start);
+        } else {
+            sf::Sprite btn_pause;
+            btn_pause.setTexture(pause);
+            btn_pause.setPosition(sf::Vector2f(135,145));
+            btn_pause.setScale(sf::Vector2f(0.18,0.18));
+            window.draw(btn_pause);
+        }
+
+
 
         sf::Sprite single_speed_up;
         single_speed_up.setTexture(single_arrow);

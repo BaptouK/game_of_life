@@ -8,7 +8,7 @@
 int main() {
 
 
-    Game game1(12);
+    Game game1(100);
     game1.setPixel(4,5,true);
     game1.setPixel(4,4,true);
     game1.setPixel(4,6,true);
