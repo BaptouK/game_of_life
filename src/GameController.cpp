@@ -4,7 +4,7 @@
 #include <thread>
 
 
-GameController::GameController(int taille) : game(Game(taille)) {
+GameController::GameController(int taille) : game(Game(taille)), save1(Game(taille)), save2(Game(taille)) {
 
 };
 
@@ -43,4 +43,27 @@ void GameController::setSpeed(std::chrono::milliseconds speed) {
 
 Game *GameController::getGame() {
     return &game;
+};
+
+void GameController::Save(int number) {
+    std::lock_guard<std::mutex> lock(mutex);
+
+    if (number == 1) {
+        save1 = game;
+    }
+    if (number == 2) {
+        save2 = game;
+    }
+
+};
+
+void GameController::Load(int number) {
+    std::lock_guard<std::mutex> lock(mutex);
+
+    if (number == 1) {
+        game = save1;
+    }
+    if (number == 2) {
+        game = save2;
+    }
 };

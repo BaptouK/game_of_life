@@ -23,10 +23,15 @@ public:
 
     Game *getGame();
 
+    void Load(int number);
+    void Save(int number);
+
 private:
     std::chrono::milliseconds speed {1000};
     GameState state {GameState::Stop};
     Game game;
+    Game save1;
+    Game save2;
     std::mutex mutex;
 };
 

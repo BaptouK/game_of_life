@@ -123,6 +123,54 @@ GuiApp::GuiApp(Game *game,GameController *gameController) : window(sf::VideoMode
         label_clear.setCharacterSize(50);
         window.draw(label_clear);
 
+        sf::RectangleShape btn_save_1(sf::Vector2f(110, 60));
+        btn_save_1.setFillColor(this->btn_color);
+        btn_save_1.setPosition(sf::Vector2f(30,410));
+        window.draw(btn_save_1);
+        sf::Text label_save_1;
+        label_save_1.setPosition(sf::Vector2f(30, 410));
+        label_save_1.setString("Save 1");
+        label_save_1.setFont(font);
+        label_save_1.setFillColor(sf::Color::Black);
+        label_save_1.setCharacterSize(50);
+        window.draw(label_save_1);
+
+        sf::RectangleShape btn_load_1(sf::Vector2f(110, 60));
+        btn_load_1.setFillColor(this->btn_color);
+        btn_load_1.setPosition(sf::Vector2f(150,410));
+        window.draw(btn_load_1);
+        sf::Text label_load_1;
+        label_load_1.setPosition(sf::Vector2f(150, 410));
+        label_load_1.setString("Load 1");
+        label_load_1.setFont(font);
+        label_load_1.setFillColor(sf::Color::Black);
+        label_load_1.setCharacterSize(50);
+        window.draw(label_load_1);
+
+        sf::RectangleShape btn_save_2(sf::Vector2f(110, 60));
+        btn_save_2.setFillColor(this->btn_color);
+        btn_save_2.setPosition(sf::Vector2f(30,480));
+        window.draw(btn_save_2);
+        sf::Text label_save_2;
+        label_save_2.setPosition(sf::Vector2f(30, 480));
+        label_save_2.setString("Save 2");
+        label_save_2.setFont(font);
+        label_save_2.setFillColor(sf::Color::Black);
+        label_save_2.setCharacterSize(50);
+        window.draw(label_save_2);
+
+        sf::RectangleShape btn_load_2(sf::Vector2f(110, 60));
+        btn_load_2.setFillColor(this->btn_color);
+        btn_load_2.setPosition(sf::Vector2f(150,480));
+        window.draw(btn_load_2);
+        sf::Text label_load_2;
+        label_load_2.setPosition(sf::Vector2f(150, 480));
+        label_load_2.setString("Load 2");
+        label_load_2.setFont(font);
+        label_load_2.setFillColor(sf::Color::Black);
+        label_load_2.setCharacterSize(50);
+        window.draw(label_load_2);
+
         update_grid();
         display_grid();
 
@@ -243,30 +291,50 @@ void GuiApp::Left_click(int x, int y) {
      }
 
     if (!(x<70 || x>110) && !(y<140 ||y>180)) { // Single Speed Down Button
-        std::cout << "Prout " << std::endl;
         std::chrono::milliseconds speed{50};
         gameController->setSpeed(gameController->getSpeed()+speed );
         return;
     }
 
     if (!(x<10 || x>65) && !(y<140 ||y>180)) { // Double Speed Down Button
-        std::cout << "Prout " << std::endl;
         std::chrono::milliseconds speed{100};
         gameController->setSpeed(gameController->getSpeed()+speed );
         return;
     }
 
     if (!(x<190 || x>220) && !(y<140 ||y>180)) { // Single Speed Up Button
-        std::cout << "Prout " << std::endl;
         std::chrono::milliseconds speed{50};
         gameController->setSpeed(gameController->getSpeed()-speed );
         return;
     }
 
     if (!(x<240 || x>290) && !(y<140 ||y>180)) { // Double Speed Up Button
-        std::cout << "Prout " << std::endl;
         std::chrono::milliseconds speed{100};
         gameController->setSpeed(gameController->getSpeed()-speed );
+        return;
+    }
+
+    if (!(x<30 || x>140) && !(y<410 ||y>470)) { // Save 1
+        std::chrono::milliseconds speed{100};
+        gameController->Save(1);
+        return;
+    }
+
+    if (!(x<150 || x>250) && !(y<410 ||y>460)) { // Load 1
+        std::chrono::milliseconds speed{100};
+        gameController->Load(1);
+        return;
+    }
+
+    if (!(x<30 || x>140) && !(y<480 ||y>540)) { // Save 2
+        std::chrono::milliseconds speed{100};
+        gameController->Save(2);
+        return;
+    }
+
+    if (!(x<150 || x>260) && !(y<490 ||y>540)) { // Load 2
+        std::chrono::milliseconds speed{100};
+        gameController->Load(2);
         return;
     }
 
