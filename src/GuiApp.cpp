@@ -10,22 +10,24 @@ GuiApp::GuiApp(Game *game,GameController *gameController) : window(sf::VideoMode
     window.setFramerateLimit(60);
 
     this->fillGrid();
+    std::string assets_path{"../assets"};
 
     if (!font.loadFromFile("../assets/OpenSans_Condensed-Light.ttf")) {
         std::cout << "Error loading font" << std::endl;
+        assets_path = "assets";
     }
 
     sf::Texture single_arrow;
-    single_arrow.loadFromFile("../assets/arrow1.png");
+    single_arrow.loadFromFile(assets_path+"/arrow1.png");
 
     sf::Texture double_arrow;
-    double_arrow.loadFromFile("../assets/arrow2.png");
+    double_arrow.loadFromFile(assets_path+"/arrow2.png");
 
     sf::Texture pause;
-    pause.loadFromFile("../assets/pause.png");
+    pause.loadFromFile(assets_path+"/pause.png");
 
     sf::Texture start;
-    start.loadFromFile("../assets/start.png");
+    start.loadFromFile(assets_path+"/start.png");
 
     while (window.isOpen()) {
 
