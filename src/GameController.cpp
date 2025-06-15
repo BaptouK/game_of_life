@@ -4,7 +4,7 @@
 #include <thread>
 
 
-GameController::GameController(Game *game) : game(game) {
+GameController::GameController(int taille) : game(Game(taille)) {
 
 };
 
@@ -26,10 +26,10 @@ void GameController::update_game_logic() {
     while (true) {
         if (getState() == GameState::Running) {
             std::this_thread::sleep_for(getSpeed());
-            game->updateGrid();
+            game.updateGrid();
         }
     }
-};
+}
 
 std::chrono::milliseconds GameController::getSpeed() {
     std::lock_guard<std::mutex> lock(mutex);
@@ -40,3 +40,7 @@ void GameController::setSpeed(std::chrono::milliseconds speed) {
     std::lock_guard<std::mutex> lock(mutex);
     this->speed = speed;
 }
+
+Game *GameController::getGame() {
+    return &game;
+};

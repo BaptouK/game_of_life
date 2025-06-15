@@ -8,52 +8,7 @@ GuiApp::GuiApp(Game *game,GameController *gameController) : window(sf::VideoMode
     //window.setVerticalSyncEnabled(true); // Permet de gérer le framerate avec le gpu pour ce synchro avec l'écran
     window.setFramerateLimit(60);
 
-    int x = game_coord.first;
-    int y = game_coord.second;
-    //Create grid
-    for (int i = 0; i < game->getTaille(); i++) {
-        this->cellules.push_back(std::vector<sf::RectangleShape>());
-        for (int j = 0; j < game->getTaille(); j++) {
-            auto cellule_color = sf::Color::Black;
-            if (!game->is_alive(i, j)) {
-                cellule_color = sf::Color::White;
-            }
-
-            sf::RectangleShape cellule(sf::Vector2f( taille_cellule,taille_cellule));
-            cellule.setFillColor(cellule_color);
-            cellule.setPosition(sf::Vector2f(x, y));
-            cellule.setOutlineColor(sf::Color(156, 156, 156));
-            cellule.setOutlineThickness(1);
-            this->cellules[i].push_back(cellule);
-
-            x+=taille_cellule;
-        }
-        x = game_coord.first;
-        y+=taille_cellule;
-    }
-    for (int i = 0; i < game->getTaille(); i++) {
-        this->cellules.push_back(std::vector<sf::RectangleShape>());
-
-        for (int j = 0; j < game->getTaille(); j++) {
-
-            auto cellule_color = sf::Color::White;
-
-            if (game->is_alive(i, j)) {
-                cellule_color = sf::Color::Black;
-            }
-
-            sf::RectangleShape cellule(sf::Vector2f( taille_cellule,taille_cellule));
-            cellule.setFillColor(cellule_color);
-            cellule.setPosition(sf::Vector2f(x, y));
-            cellule.setOutlineColor(sf::Color(156, 156, 156));
-            cellule.setOutlineThickness(1);
-            this->cellules[i].push_back(cellule);
-
-            x+=taille_cellule;
-        }
-        x = game_coord.first;
-        y+=taille_cellule;
-    }
+    this->fillGrid();
 
     sf::Font font;
     if (!font.loadFromFile("../assets/OpenSans_Condensed-Light.ttf")) {
@@ -203,6 +158,36 @@ GuiApp::~GuiApp() {
 
 };
 
+void GuiApp::fillGrid() {
+    int x = game_coord.first;
+    int y = game_coord.second;
+    //Create grid
+    for (int i = 0; i < game->getTaille(); i++) {
+        this->cellules.push_back(std::vector<sf::RectangleShape>());
+
+        for (int j = 0; j < game->getTaille(); j++) {
+
+            auto cellule_color = sf::Color::White;
+
+            if (game->is_alive(i, j)) {
+                cellule_color = sf::Color::Black;
+            }
+
+            sf::RectangleShape cellule(sf::Vector2f( taille_cellule,taille_cellule));
+            cellule.setFillColor(cellule_color);
+            cellule.setPosition(sf::Vector2f(x, y));
+            cellule.setOutlineColor(sf::Color(156, 156, 156));
+            cellule.setOutlineThickness(1);
+            this->cellules[i].push_back(cellule);
+
+            x+=taille_cellule;
+        }
+        x = game_coord.first;
+        y+=taille_cellule;
+    }
+};
+
+
 void GuiApp::display_grid() {
     // Diviser taille/nombre de cellules pour un truc responsive
     //std::cout << "GUI grid display" << std::endl;
@@ -237,6 +222,7 @@ void GuiApp::update_grid() {
 void GuiApp::Left_click(int x, int y) {
 
     if (!(x<130 || x>170) && !(y<140 ||y>180)) { // Start Button
+
         if (gameController->getState() == GameController::GameState::Running) {
             gameController->setState(GameController::GameState::Stop);
         }else {

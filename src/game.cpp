@@ -15,15 +15,13 @@ void Game::setPixel(int row, int col, bool value) {
     this->grid[row][col] = value;
 };
 
-bool Game::getPixel(int row, int col) {
+bool Game::getPixel(int row, int col) const{
     return this->grid[row][col];
 };
 
-int Game::getTaille() {
+int Game::getTaille() const{
     return this->taille;
 };
-
-
 
 bool Game::updatePixel(int row, int col) {
     int cpt=0;
@@ -136,7 +134,7 @@ void Game::CreateSoup() {
     }
 };
 
-int Game::getGeneration() {
+unsigned int  Game::getGeneration() const {
     return generation;
 }
 

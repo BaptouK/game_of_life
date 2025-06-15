@@ -16,6 +16,8 @@ public:
 
     void display_grid();
     void update_grid();
+    void fillGrid();
+
 
     void setGameController(GameController *gameController);
 

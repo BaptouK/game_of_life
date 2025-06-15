@@ -6,7 +6,7 @@
 
 class GameController {
 public:
-    GameController(Game *game);
+    GameController(int taille);
     ~GameController();
     enum class GameState {
         Running,
@@ -21,10 +21,12 @@ public:
 
     void update_game_logic();
 
+    Game *getGame();
+
 private:
     std::chrono::milliseconds speed {1000};
     GameState state {GameState::Stop};
-    Game *game;
+    Game game;
     std::mutex mutex;
 };
 
