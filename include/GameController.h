@@ -26,6 +26,8 @@ public:
     void Load(int number);
     void Save(int number);
 
+    void CreateNewGame(int taille);
+
 private:
     std::chrono::milliseconds speed {1000};
     GameState state {GameState::Stop};

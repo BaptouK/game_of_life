@@ -18,9 +18,13 @@ public:
     void update_grid();
     void fillGrid();
 
-
     void setGameController(GameController *gameController);
 
+    void changeSize();
+
+    void CreatenewGame(std::string& input);
+
+    void updateTaille_cellule();
 private:
     std::vector<std::vector<sf::RectangleShape>> cellules;
     Game *game;

@@ -67,3 +67,7 @@ void GameController::Load(int number) {
         game = save2;
     }
 };
+
+void GameController::CreateNewGame(int taille) {
+    game = Game(taille);
+}

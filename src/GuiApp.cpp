@@ -1,7 +1,8 @@
 #include "../include/GuiApp.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <float.h>
+
+inline sf::Font font;
 
 
 GuiApp::GuiApp(Game *game,GameController *gameController) : window(sf::VideoMode(1100, 800), "Game of Life"), game(game), gameController(gameController) {
@@ -10,7 +11,6 @@ GuiApp::GuiApp(Game *game,GameController *gameController) : window(sf::VideoMode
 
     this->fillGrid();
 
-    sf::Font font;
     if (!font.loadFromFile("../assets/OpenSans_Condensed-Light.ttf")) {
         std::cout << "Error loading font" << std::endl;
     }
@@ -171,6 +171,18 @@ GuiApp::GuiApp(Game *game,GameController *gameController) : window(sf::VideoMode
         label_load_2.setCharacterSize(50);
         window.draw(label_load_2);
 
+        sf::RectangleShape btn_new_grid(sf::Vector2f(230, 60));
+        btn_new_grid.setFillColor(this->btn_color);
+        btn_new_grid.setPosition(sf::Vector2f(30,550));
+        window.draw(btn_new_grid);
+        sf::Text label_new_grid;
+        label_new_grid.setPosition(sf::Vector2f(40, 550));
+        label_new_grid.setString("Change size");
+        label_new_grid.setFont(font);
+        label_new_grid.setFillColor(sf::Color::Black);
+        label_new_grid.setCharacterSize(50);
+        window.draw(label_new_grid);
+
         update_grid();
         display_grid();
 
@@ -193,7 +205,6 @@ GuiApp::GuiApp(Game *game,GameController *gameController) : window(sf::VideoMode
             
 
             if (event.type == sf::Event::MouseMoved){
-                //std::cout << "coords mouse x " << event.mouseMove.x << " y "  << event.mouseMove.y << std::endl;
             }
 
         }
@@ -237,8 +248,6 @@ void GuiApp::fillGrid() {
 
 
 void GuiApp::display_grid() {
-    // Diviser taille/nombre de cellules pour un truc responsive
-    //std::cout << "GUI grid display" << std::endl;
 
     for (int i = 0; i < cellules.size(); i++) {
         for (int j = 0; j < cellules[i].size(); j++) {
@@ -253,7 +262,6 @@ void GuiApp::setGameController(GameController *gc) {
 
 
 void GuiApp::update_grid() {
-    //std::cout << "GUI grid update" << std::endl;
     for (int i = 0; i < cellules.size(); i++) {
         for (int j = 0; j < cellules[i].size(); j++) {
             if (game->is_alive(i, j)) {
@@ -315,26 +323,33 @@ void GuiApp::Left_click(int x, int y) {
     }
 
     if (!(x<30 || x>140) && !(y<410 ||y>470)) { // Save 1
-        std::chrono::milliseconds speed{100};
         gameController->Save(1);
         return;
     }
 
     if (!(x<150 || x>250) && !(y<410 ||y>460)) { // Load 1
-        std::chrono::milliseconds speed{100};
         gameController->Load(1);
+        updateTaille_cellule();
+        cellules.clear();
+        fillGrid();
         return;
     }
 
     if (!(x<30 || x>140) && !(y<480 ||y>540)) { // Save 2
-        std::chrono::milliseconds speed{100};
         gameController->Save(2);
         return;
     }
 
     if (!(x<150 || x>260) && !(y<490 ||y>540)) { // Load 2
-        std::chrono::milliseconds speed{100};
         gameController->Load(2);
+        updateTaille_cellule();
+        cellules.clear();
+        fillGrid();
+        return;
+    }
+
+    if (!(x<30 || x>260) && !(y<550 ||y>610)) { // Change size
+        changeSize();
         return;
     }
 
@@ -349,5 +364,94 @@ void GuiApp::Left_click(int x, int y) {
     } else {
         game->setPixel(y,x,true);
     }
+
+}
+
+void handleTextInput(const sf::Event& event, std::string& input) {
+    if (event.type == sf::Event::TextEntered) {
+        // On accepte uniquement les caractères ASCII pour les chiffres
+        if (event.text.unicode >= '0' && event.text.unicode <= '9') {
+            input += static_cast<char>(event.text.unicode);
+        }
+        // Gérer retour arrière (backspace)
+        else if (event.text.unicode == 8 && !input.empty()) {
+            input.pop_back();
+        }
+    }
+    std::cout << input << std::endl;
+
+};
+
+void GuiApp::updateTaille_cellule() {
+    taille_cellule = static_cast<float>(game_size.first/game->getTaille());
+}
+
+void GuiApp::CreatenewGame(std::string& input) {
+    if (input.empty()) {
+        return;
+    }else {
+        int n = std::stoi(input);
+        gameController->CreateNewGame(n);
+        updateTaille_cellule();
+        cellules.clear();
+        fillGrid();
+    }
+}
+
+
+void GuiApp::changeSize() {
+    std::string input {""};
+
+    sf::RenderWindow window2(sf::VideoMode(600, 600), "Change the size");
+
+    sf::RectangleShape menu(sf::Vector2f(600, 600));
+    menu.setFillColor(sf::Color(150, 150, 150));
+
+    sf::RectangleShape btn_accept(sf::Vector2f(270, 50));
+    btn_accept.setFillColor(btn_color);
+    btn_accept.setPosition(sf::Vector2f(10, 300));
+
+    sf::Text label_accept;
+    label_accept.setPosition(sf::Vector2f(15, 290));
+    label_accept.setFont(font);
+    label_accept.setFillColor(sf::Color::Black);
+    label_accept.setCharacterSize(50);
+
+    sf::Text label_taille;
+    label_taille.setPosition(sf::Vector2f(5, 0));
+    label_taille.setFont(font);
+    label_taille.setFillColor(sf::Color::Black);
+    label_taille.setCharacterSize(50);
+
+    while (window2.isOpen()) {
+        sf::Event event;
+
+        while (window2.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                window2.close();
+
+            if (event.mouseButton.button == sf::Mouse::Left){
+                if (!(event.mouseButton.x<10 || event.mouseButton.x>280) && !(event.mouseButton.y<300 ||event.mouseButton.y>350)) { // Change size
+                    CreatenewGame(input);
+                    window2.close();
+                }
+            }
+            handleTextInput(event, input);
+        }
+        window2.clear();
+
+        label_taille.setString("Write the new grid size \n min: 2\n max: 1000 \n New size : " + input);
+        label_accept.setString("Create new grid ");
+
+        window2.draw(menu);
+
+        window2.draw(btn_accept);
+        window2.draw(label_accept);
+
+        window2.draw(label_taille);
+
+        window2.display();
+    }
+
 
 }
