@@ -12,10 +12,14 @@ GuiApp::GuiApp(Game *game,GameController *gameController) : window(sf::VideoMode
     this->fillGrid();
     std::string assets_path{"../assets"};
 
-    if (!font.loadFromFile("../assets/OpenSans_Condensed-Light.ttf")) {
-        std::cout << "Error loading font" << std::endl;
+    if (!font.loadFromFile(assets_path+"/OpenSans_Condensed-Light.ttf")) {
+        std::cout << "Error loading font 1" << std::endl;
         assets_path = "assets";
-    }
+    };
+
+    if (!font.loadFromFile(assets_path+"/OpenSans_Condensed-Light.ttf")) {
+        std::cout << "Error loading font 2" << std::endl;
+    };
 
     sf::Texture single_arrow;
     single_arrow.loadFromFile(assets_path+"/arrow1.png");

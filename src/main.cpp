@@ -13,7 +13,7 @@ int main() {
     // game1.setPixel(4,4,true);
     // game1.setPixel(4,6,true);
 
-    GameController gameController1(100);
+    GameController gameController1(50);
     std::thread game_controller(&GameController::update_game_logic, &gameController1);
     game_controller.detach();
 
